@@ -57,6 +57,14 @@ function markCube(position, color) {
     grid[position.x][position.y].cube.material.color.set(color);
 }
 
+function markPath(cameFrom, end) {
+    let current = end;
+    while (current !== null) {
+        markCube(current, 0xffffff);
+        current = cameFrom[`${current.x},${current.y}`];
+    }
+}
+
 function getNeighbors(position) {
     const neighbors = [];
     const directions = [
@@ -79,12 +87,15 @@ function getNeighbors(position) {
 async function bfs(start, end) {
     const queue = [start];
     const visited = new Set();
+    const cameFrom = {};
     visited.add(`${start.x},${start.y}`);
+    cameFrom[`${start.x},${start.y}`] = null
 
     while (queue.length > 0) {
         const current = queue.shift();
         if (current.x === end.x && current.y === end.y) {
             markCube(current, 0x0000ff);
+            markPath(cameFrom, end);
             document.getElementById('ins').innerText = 'Path found using BFS!';
             return true;
         }
@@ -97,6 +108,7 @@ async function bfs(start, end) {
             if (!visited.has(key)) {
                 visited.add(key);
                 queue.push(neighbor);
+                cameFrom[key] = current;
             }
         }
     }
@@ -107,12 +119,15 @@ async function bfs(start, end) {
 async function dfs(start, end) {
     const stack = [start];
     const visited = new Set();
+    const cameFrom = {};
     visited.add(`${start.x},${start.y}`);
+    cameFrom[`${start.x},${start.y}`] = null;
 
     while (stack.length > 0) {
         const current = stack.pop();
         if (current.x === end.x && current.y === end.y) {
             markCube(current, 0x0000ff);
+            markPath(cameFrom, end);
             document.getElementById('ins').innerText = 'Path found using DFS!';
             return true;
         }
@@ -125,6 +140,7 @@ async function dfs(start, end) {
             if (!visited.has(key)) {
                 visited.add(key);
                 stack.push(neighbor);
+                cameFrom[key] = current;
             }
         }
     }
@@ -135,13 +151,16 @@ async function dfs(start, end) {
 async function dijkstra(start, end) {
     const pq = [{ position: start, cost: 0 }];
     const distances = Array.from({ length: gridSize }, () => Array(gridSize).fill(Infinity));
+    const cameFrom = {};
     distances[start.x][start.y] = 0;
+    cameFrom[`${start.x},${start.y}`] = null;
 
     while (pq.length > 0) {
         pq.sort((a, b) => a.cost - b.cost);
         const { position, cost } = pq.shift();
         if (position.x === end.x && position.y === end.y) {
             markCube(position, 0x0000ff);
+            markPath(cameFrom, end);
             document.getElementById('ins').innerText = 'Path found using Dijkstra\'s!';
             return true;
         }
@@ -154,6 +173,7 @@ async function dijkstra(start, end) {
             if (newCost < distances[neighbor.x][neighbor.y]) {
                 distances[neighbor.x][neighbor.y] = newCost;
                 pq.push({ position: neighbor, cost: newCost });
+                cameFrom[`${neighbor.x},${neighbor.y}`] = position;
             }
         }
     }
