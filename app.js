@@ -19,6 +19,11 @@ for (let x = 0; x < gridSize; x++) {
     for (let y = 0; y < gridSize; y++) {
         const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
         const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
+        const lineGeometry = new THREE.EdgesGeometry(geometry);
+        const line = new THREE.LineSegments(lineGeometry, lineMaterial);
+        line.position.set(x - gridSize / 2, y - gridSize / 2, 0);
+        scene.add(line);
         const cube = new THREE.Mesh(geometry, material);
         cube.position.set(x - gridSize / 2, y - gridSize / 2, 0);
         scene.add(cube);
@@ -26,7 +31,7 @@ for (let x = 0; x < gridSize; x++) {
     }
 }
 
-camera.position.z = 10;
+camera.position.z = 9;
 
 function animate() {
     requestAnimationFrame(animate);
