@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Pathfinding Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="text-align: center; margin-top: 5%;">
+        <h1>3D Pathfinding Visualizer</h1>
+        <p>By Robin Hannan, Muhammad Abhyasa Santoso, and Muhammad Izzul Sinar Mahadhika</p>
+    </div>
+    <div id="controls">
+        <button id="bfs">BFS</button>
+        <button id="dfs">DFS</button>
+        <button id="dijkstra">Dijkstra's</button>
+        <button id="reset">Reset</button>
+    </div>
+    <div style="text-align: center;">
+        <p id="ins">Click on the grid to place the <b>start node<b></p>
+    </div>
+    <div id="canvas-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+<script>
+    var clicks = 0;
+
+    // if reset button is clicked
+    document.getElementById('reset').addEventListener('click', function() {
+        // reset instructions
+        document.getElementById('ins').innerHTML = "Click on the grid to place the <b>start node<b>";
+        // reset clicks
+        clicks = 0;
+    });
+
+    // if bfs button is clicked
+    document.getElementById('bfs').addEventListener('click', function() {
+        document.getElementById('ins').innerHTML = "Running <b>BFS</b> algorithm...";
+    });
+
+    // if dfs button is clicked
+    document.getElementById('dfs').addEventListener('click', function() {
+        document.getElementById('ins').innerHTML = "Running <b>DFS</b> algorithm...";
+    });
+
+    // if dijkstra button is clicked
+    document.getElementById('dijkstra').addEventListener('click', function() {
+        document.getElementById('ins').innerHTML = "Running <b>Dijkstra's</b> algorithm...";
+    });
+
+    // detect click inside canvas
+    var canvas = document.getElementsByTagName('canvas')[0];
+    canvas.addEventListener('click', function(event) {
+        var rect = canvas.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        console.log("x: " + x + " y: " + y);
+
+        // detect first click
+        if (clicks == 0) {
+            // change label
+            document.getElementById('ins').innerHTML = "Click on the grid to place the <b>end node</b>";
+            clicks++;
+        } else if (clicks == 1) {
+            // change label
+            document.getElementById('ins').innerHTML = "Click on the grid to place the <b>walls</b>";
+            clicks++;
+        }
+    });
+</script>
+</html>
