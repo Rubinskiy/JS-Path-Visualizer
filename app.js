@@ -12,6 +12,7 @@ const cubeSize = 1;
 let startPoint = null;
 let endPoint = null;
 let isRunning = false;
+let textMeshes = [];
 
 // Create the 3D grid
 for (let x = 0; x < gridSize; x++) {
@@ -51,6 +52,12 @@ function resetGrid() {
     startPoint = null;
     endPoint = null;
     isRunning = false;
+
+    // Remove text meshes
+    for (let i = 0; i < textMeshes.length; i++) {
+        scene.remove(textMeshes[i]);
+    }
+    textMeshes = [];
 }
 
 function markCube(position, color) {
@@ -69,6 +76,7 @@ function addNumberToCube(position, number) {
         const textMesh = new THREE.Mesh(textGeometry, textMaterial);
         textMesh.position.set(position.x - gridSize / 2 - 0.2, position.y - gridSize / 2 - 0.2, 0.5);
         scene.add(textMesh);
+        textMeshes.push(textMesh);
     });
 }
 
