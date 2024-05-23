@@ -57,13 +57,33 @@ function markCube(position, color) {
     grid[position.x][position.y].cube.material.color.set(color);
 }
 
+function addNumberToCube(position, number) {
+    const loader = new THREE.FontLoader();
+    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+        const textGeometry = new THREE.TextGeometry(number.toString(), {
+            font: font,
+            size: 0.4,
+            height: 0.1
+        });
+        const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        textMesh.position.set(position.x - gridSize / 2 - 0.2, position.y - gridSize / 2 - 0.2, 0.5);
+        scene.add(textMesh);
+    });
+}
+
 function markPath(cameFrom, end) {
     let current = end;
+    let distance = 0;
     while (current !== null) {
         markCube(current, 0xffffff);
+        addNumberToCube(current, distance);
         current = cameFrom[`${current.x},${current.y}`];
+        distance++;
     }
+    alert(`Path found! Distance: ${distance - 1} blocks.`);
 }
+
 
 function getNeighbors(position) {
     const neighbors = [];
