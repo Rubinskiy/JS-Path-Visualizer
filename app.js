@@ -81,7 +81,6 @@ function markPath(cameFrom, end) {
         current = cameFrom[`${current.x},${current.y}`];
         distance++;
     }
-    alert(`Path found! Distance: ${distance - 1} blocks.`);
 }
 
 
