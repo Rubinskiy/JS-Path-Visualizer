@@ -80,14 +80,12 @@ function addNumberToCube(position, number) {
     });
 }
 
-function markPath(type, cameFrom, end) {
+function markPath(cameFrom, end) {
     let current = end;
     let distance = 0;
     while (current !== null) {
         markCube(current, 0xffffff);
-        if (type === "dijkstra") {
-            addNumberToCube(current, distance);
-        }
+        addNumberToCube(current, distance);
         current = cameFrom[`${current.x},${current.y}`];
         distance++;
     }
